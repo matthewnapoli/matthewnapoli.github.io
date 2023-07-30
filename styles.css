@@ -12,12 +12,14 @@ body {
 #myCanvas{
   width: 100%;
   height: 100%;
-  margin: 0
+  margin: 0;
+  opacity: 0.5;
 }
 
 .typing-container {
+  margin: 7%;
   text-align: start;
-  position: static;
+  position: absolute;
 }
 
 #typing-text {
@@ -32,10 +34,8 @@ body {
 }
 
 #typing-cursor {
-  position: absolute;
+  position: static;
   display: inline-block;
-  top: 100;
-  left: 100;
   width: 10px;
   height: 26px;
   background-color: white;
@@ -43,7 +43,7 @@ body {
 }
 
 @keyframes blink {
-  0%, 100% {
+  100%, 0% {
     opacity: 0;
   }
   50% {
@@ -52,11 +52,11 @@ body {
 }
 
 a {
-  color: #00ce00;
+  color: #66ff00;
 }
 
 a:hover
 {
-  color: #00ce00;
+  color: #66ff00;
 }
   

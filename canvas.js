@@ -2,10 +2,15 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 const numSteps = 100000; // Number of steps in the random walk
-const stepSize = 2;
+const stepSize = 10;
 const startX = 0;
 const startY = canvas.height / 2;
-const timeInterval = 150;
+const timeInterval = 15;
+
+var Point = function(){
+  this.x = startX;
+  this.y = startY;
+}
 
 const colors = [
   '#FF1493', // Pink
@@ -20,37 +25,34 @@ const colors = [
   '#8B4513'  // Saddle Brown
 ];
 
-function getRandomColor() {
-  return colors[Math.floor(Math.random() * colors.length)];
-}
 
-function drawRandomWalk(steps) {
-  let x = startX;
-  let y = startY;
+
+function drawRandomWalk(stPoint, steps, color) {
+  ctx.globalAlpha = 0.01;
   let stepCount = 0;
-
+  ctx.beginPath();
+  ctx.moveTo(stPoint.x, stPoint.y);
+  setTimeout(drawStep, 10);
+  
   function drawStep() {
     if (stepCount >= steps) {
       return;
     }
 
     const direction = Math.random() < 0.5 ? -1 : 1;
-    y += stepSize * direction; // Flip x and y
-    x = startX + stepCount * 2; // Flip x and y
-    ctx.lineTo(x, y);
+    stPoint.y += stepSize * direction; // Flip x and y
+    stPoint.x = startX + stepCount * 2; // Flip x and y
+    ctx.lineTo(stPoint.x, stPoint.y);
 
-    ctx.strokeStyle = getRandomColor();
+    ctx.strokeStyle = color;
     ctx.lineWidth = 1;
     ctx.stroke();
-
     stepCount++;
-
-    requestAnimationFrame(drawStep);
+    requestAnimationFrame(drawStep,10);
   }
-
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  setTimeout(drawStep, 10);
 }
 
-drawRandomWalk(numSteps);
+for(color of colors)
+{
+  drawRandomWalk(new Point(), numSteps, color);
+}

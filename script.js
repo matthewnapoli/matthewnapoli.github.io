@@ -1,7 +1,7 @@
 const texts = [
-  "Hello World,",
+  "Hello World!",
   "My name is Matthew Napoli.",
-  "I am a current a December 2023 graduate from UCLA.<img src='img/bruin-logo.png' alt='UCLA Bruins Logo' style='width: 24px; height: 24px;'>",
+  "I am a current a December 2023 graduate from UCLA majoring in Mathematics and Economics, and minoring in Computing.<img src='img/bruin-logo.png' alt='UCLA Bruins Logo' style='width: 24px; height: 24px; margin-bottom: -4px'>",
   "Here is some of my work:",
   { text: "LinkedIn", link: "https://www.linkedin.com/in/matthew--napoli/" },
   { text: "Github", link: "https://github.com/matthewnapoli" },
@@ -9,11 +9,13 @@ const texts = [
   { text: "Trading Algorithms (via Quantconnect)", link: "https://github.com/matthewnapoli/quantconnect-algos/tree/main" },
   { text: "Basic Trading Simulator", link: "https://github.com/matthewnapoli/PIC16B-Proj" },
   { text: "Leetcode", link: "https://leetcode.com/matthewzz/" },
-  '<p style="font-size: 15px">(This took π<sup>2</sup> seconds to render)</p>'
+  '<p style="font-size: 15px">(This took π<sup>π</sup> seconds to render)</p>'
 ];
 
+const waitingTime = 5;
 const typingText = document.getElementById("typing-text");
 const typingCursor = document.getElementById("typing-cursor");
+typingText.appendChild(typingCursor);
 
 let lineIndex = 0;
 let charIndex = 0;
@@ -28,17 +30,22 @@ function typeText() {
       if (charIndex < currentLine.length) {
         fullText += currentLine[charIndex];
         typingText.innerHTML = fullText;
+        typingText.append(typingCursor)
         
         charIndex++;
-        setTimeout(typeText, 36.02045401); // Delay between typing each character
+        setTimeout(typeText, waitingTime); // Delay between typing each character
         typingCursor.style.left+="24px";
       } else {
         lineIndex++;
         charIndex = 0;
-        fullText += "<br><br>";
+        if(lineIndex < 9)
+        {
+          fullText += "<br><br>";
+        }  
         typingText.innerHTML = fullText;
+        typingText.append(typingCursor)
 
-        setTimeout(typeText, 36.02045401); // Delay before typing the next line
+        setTimeout(typeText, waitingTime); // Delay before typing the next line
       }
     } else {
       // Hyperlink
@@ -46,19 +53,22 @@ function typeText() {
         const linkText = currentLine.text.slice(charIndex, charIndex + 1);
         fullText += `<a href="${currentLine.link}" target="_blank">${linkText}</a>`;
         typingText.innerHTML = fullText;
+        
 
         charIndex++;
-        setTimeout(typeText, 36.02045401); // Delay between typing each character
+        setTimeout(typeText, waitingTime); // Delay between typing each character
       } else {
         lineIndex++;
         charIndex = 0;
         fullText += `<br>`;
         typingText.innerHTML = fullText;
+        typingText.append(typingCursor)
         if (lineIndex === 10) {
           fullText += `<br>`;
           typingText.innerHTML = fullText;
+          typingText.append(typingCursor)
         }
-        setTimeout(typeText, 36.02045401); // Delay before typing the next lines
+        setTimeout(typeText, waitingTime); // Delay before typing the next lines
       }
     }
   }

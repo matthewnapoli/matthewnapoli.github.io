@@ -1,6 +1,7 @@
 const texts = [
   "Hello World,",
-  "My name is Matthew Napoli, and I am a current December 2023 graduate from UCLA.",
+  "My name is Matthew Napoli.",
+  "I am a current a December 2023 graduate from UCLA.<img src='bruin-logo.png' alt='UCLA Bruins Logo' style='width: 24px; height: 24px;'>",
   "Here is some of my work:",
   { text: "LinkedIn", link: "https://www.linkedin.com/in/matthew--napoli/" },
   { text: "Github", link: "https://github.com/matthewnapoli" },
@@ -8,7 +9,7 @@ const texts = [
   { text: "Trading Algorithms (via Quantconnect)", link: "https://github.com/matthewnapoli/quantconnect-algos/tree/main" },
   { text: "Basic Trading Simulator", link: "https://github.com/matthewnapoli/PIC16B-Proj" },
   { text: "Leetcode", link: "https://leetcode.com/matthewzz/" },
-  '<p style="font-size: 15px">This took π<sup>2</sup> seconds to render</p>'
+  '<p style="font-size: 15px">(This took π<sup>2</sup> seconds to render)</p>'
 ];
 
 const typingText = document.getElementById("typing-text");
@@ -18,6 +19,7 @@ let lineIndex = 0;
 let charIndex = 0;
 let fullText = "";
 
+
 function typeText() {
   if (lineIndex < texts.length) {
     const currentLine = texts[lineIndex];
@@ -26,6 +28,8 @@ function typeText() {
       if (charIndex < currentLine.length) {
         fullText += currentLine[charIndex];
         typingText.innerHTML = fullText;
+        typingCursor.style.top = typingText.scrollHeight + "px";
+        typingCursor.style.left = typingText.scrollLeft + "px";
         charIndex++;
         setTimeout(typeText, 36.02045401); // Delay between typing each character
       } else {
@@ -34,6 +38,7 @@ function typeText() {
         fullText += "<br><br>";
         typingText.innerHTML = fullText;
         typingCursor.style.top = typingText.scrollHeight + "px"; // Move the cursor to the end of the typingText element
+        typingCursor.style.left = typingText.scrollLeft + "px";
         setTimeout(typeText, 36.02045401); // Delay before typing the next line
       }
     } else {
@@ -42,6 +47,7 @@ function typeText() {
         const linkText = currentLine.text.slice(charIndex, charIndex + 1);
         fullText += `<a href="${currentLine.link}" target="_blank">${linkText}</a>`;
         typingText.innerHTML = fullText;
+        typingCursor.style.left = typingText.scrollLeft + "px";
         typingCursor.style.top = typingText.scrollHeight + "px";
         charIndex++;
         setTimeout(typeText, 36.02045401); // Delay between typing each character
@@ -50,8 +56,9 @@ function typeText() {
         charIndex = 0;
         fullText += `<br>`;
         typingText.innerHTML = fullText;
+        typingCursor.style.left = typingText.scrollLeft + "px";
         typingCursor.style.top = typingText.scrollHeight + "px"; // Move the cursor to the end of the typingText element
-        if (lineIndex === 9) {
+        if (lineIndex === 10) {
           fullText += `<br>`;
           typingText.innerHTML = fullText;
         }

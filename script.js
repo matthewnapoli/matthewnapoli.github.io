@@ -8,7 +8,7 @@ const texts = [
   { text: "Trading Algorithms (via Quantconnect)", link: "https://github.com/matthewnapoli/quantconnect-algos/tree/main" },
   { text: "Basic Trading Simulator", link: "https://github.com/matthewnapoli/PIC16B-Proj" },
   { text: "Leetcode", link: "https://leetcode.com/matthewzz/" },
-  "(This took  ~π^2 seconds to complete)"
+  '<p style="font-size: 15px">This took π<sup>2</sup> seconds to render</p>'
 ];
 
 const typingText = document.getElementById("typing-text");
@@ -33,6 +33,7 @@ function typeText() {
         charIndex = 0;
         fullText += "<br><br>";
         typingText.innerHTML = fullText;
+        typingCursor.style.top = typingText.scrollHeight + "px"; // Move the cursor to the end of the typingText element
         setTimeout(typeText, 36.02045401); // Delay before typing the next line
       }
     } else {
@@ -41,6 +42,7 @@ function typeText() {
         const linkText = currentLine.text.slice(charIndex, charIndex + 1);
         fullText += `<a href="${currentLine.link}" target="_blank">${linkText}</a>`;
         typingText.innerHTML = fullText;
+        typingCursor.style.top = typingText.scrollHeight + "px";
         charIndex++;
         setTimeout(typeText, 36.02045401); // Delay between typing each character
       } else {
@@ -48,8 +50,8 @@ function typeText() {
         charIndex = 0;
         fullText += `<br>`;
         typingText.innerHTML = fullText;
-        if(lineIndex == 9)
-        {
+        typingCursor.style.top = typingText.scrollHeight + "px"; // Move the cursor to the end of the typingText element
+        if (lineIndex === 9) {
           fullText += `<br>`;
           typingText.innerHTML = fullText;
         }
@@ -58,5 +60,7 @@ function typeText() {
     }
   }
 }
+
+
 
 typeText();

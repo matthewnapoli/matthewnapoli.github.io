@@ -48,4 +48,9 @@ body {
   a {
     color: #00ce00;
   }
+
+  a:hover
+  {
+    color: #00ce00;
+  }
   

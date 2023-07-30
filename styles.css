@@ -1,5 +1,5 @@
 body {
-  margin: 100px;
+  margin: 0;
   padding: 0;
   background-color: #030303;
   display: flex;
@@ -7,6 +7,12 @@ body {
   align-items: normal;
   height: 100vh;
   font-family: 'Source Code Pro', monospace;
+}
+
+#myCanvas{
+  width: 100%;
+  height: 100%;
+  margin: 0
 }
 
 .typing-container {
@@ -27,8 +33,9 @@ body {
 
 #typing-cursor {
   position: absolute;
-  top: 0;
-  right: 0;
+  display: inline-block;
+  top: 100;
+  left: 100;
   width: 10px;
   height: 26px;
   background-color: white;

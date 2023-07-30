@@ -1,7 +1,7 @@
 const texts = [
   "Hello World,",
   "My name is Matthew Napoli.",
-  "I am a current a December 2023 graduate from UCLA.<img src='bruin-logo.png' alt='UCLA Bruins Logo' style='width: 24px; height: 24px;'>",
+  "I am a current a December 2023 graduate from UCLA.<img src='img/bruin-logo.png' alt='UCLA Bruins Logo' style='width: 24px; height: 24px;'>",
   "Here is some of my work:",
   { text: "LinkedIn", link: "https://www.linkedin.com/in/matthew--napoli/" },
   { text: "Github", link: "https://github.com/matthewnapoli" },
@@ -28,17 +28,16 @@ function typeText() {
       if (charIndex < currentLine.length) {
         fullText += currentLine[charIndex];
         typingText.innerHTML = fullText;
-        typingCursor.style.top = typingText.scrollHeight + "px";
-        typingCursor.style.left = typingText.scrollLeft + "px";
+        
         charIndex++;
         setTimeout(typeText, 36.02045401); // Delay between typing each character
+        typingCursor.style.left+="24px";
       } else {
         lineIndex++;
         charIndex = 0;
         fullText += "<br><br>";
         typingText.innerHTML = fullText;
-        typingCursor.style.top = typingText.scrollHeight + "px"; // Move the cursor to the end of the typingText element
-        typingCursor.style.left = typingText.scrollLeft + "px";
+
         setTimeout(typeText, 36.02045401); // Delay before typing the next line
       }
     } else {
@@ -47,8 +46,7 @@ function typeText() {
         const linkText = currentLine.text.slice(charIndex, charIndex + 1);
         fullText += `<a href="${currentLine.link}" target="_blank">${linkText}</a>`;
         typingText.innerHTML = fullText;
-        typingCursor.style.left = typingText.scrollLeft + "px";
-        typingCursor.style.top = typingText.scrollHeight + "px";
+
         charIndex++;
         setTimeout(typeText, 36.02045401); // Delay between typing each character
       } else {
@@ -56,8 +54,6 @@ function typeText() {
         charIndex = 0;
         fullText += `<br>`;
         typingText.innerHTML = fullText;
-        typingCursor.style.left = typingText.scrollLeft + "px";
-        typingCursor.style.top = typingText.scrollHeight + "px"; // Move the cursor to the end of the typingText element
         if (lineIndex === 10) {
           fullText += `<br>`;
           typingText.innerHTML = fullText;

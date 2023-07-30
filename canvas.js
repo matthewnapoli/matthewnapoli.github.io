@@ -51,7 +51,7 @@ function drawRandomWalk(stPoint, steps, color) {
   }
 }
 
-for(color of colors)
+for(const color of colors)
 {
   drawRandomWalk(new Point(), numSteps, color);
 }

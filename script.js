@@ -1,7 +1,7 @@
 const texts = [
   "Hello World!",
   "My name is Matthew Napoli.",
-  "I am a current a December 2023 graduate from UCLA majoring in Mathematics and Economics, and minoring in Computing.<img src='img/bruin-logo.png' alt='UCLA Bruins Logo' style='width: 24px; height: 24px; margin-bottom: -4px'>",
+  "I am currently a December 2023 grad from UCLA majoring in Mathematics & Economics, and, minoring in Computing.<img src='img/bruin-logo.png' alt='UCLA Bruins Logo' style='width: 24px; height: 24px; margin-bottom: -4px'>",
   "Here is some of my work:",
   { text: "LinkedIn", link: "https://www.linkedin.com/in/matthew--napoli/" },
   { text: "Github", link: "https://github.com/matthewnapoli" },
@@ -12,7 +12,7 @@ const texts = [
   '<p style="font-size: 15px">(This took π<sup>π</sup> seconds to render)</p>'
 ];
 
-const waitingTime = 25;
+const waitingTime = 104.17759887;
 const typingText = document.getElementById("typing-text");
 const typingCursor = document.getElementById("typing-cursor");
 typingText.appendChild(typingCursor);

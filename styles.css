@@ -1,0 +1,51 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #030303;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Source Code Pro', monospace;
+  }
+  
+  .typing-container {
+    text-align: start;
+    position: relative;
+  }
+  
+  #typing-text {
+    color: white;
+    margin-top: 0px;
+    font-size: 24px;
+    font-weight: 200;
+    margin-bottom: 400px;
+    white-space: normal;
+    overflow: hidden;
+    border-right: 2px solid white;
+    padding-right: 5px;
+  }
+  
+  #typing-cursor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 26px;
+    background-color: white;
+    animation: blink 1.0s infinite;
+  }
+  
+  @keyframes blink {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  a {
+    color: #00ce00;
+  }
+  

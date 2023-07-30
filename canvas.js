@@ -30,6 +30,7 @@ const colors = [
 function drawRandomWalk(stPoint, steps, color) {
   ctx.globalAlpha = 0.01;
   let stepCount = 0;
+  ctx.strokeStyle = color;
   ctx.beginPath();
   ctx.moveTo(stPoint.x, stPoint.y);
   setTimeout(drawStep, 10);
@@ -43,8 +44,6 @@ function drawRandomWalk(stPoint, steps, color) {
     stPoint.y += stepSize * direction; // Flip x and y
     stPoint.x = startX + stepCount * 2; // Flip x and y
     ctx.lineTo(stPoint.x, stPoint.y);
-
-    ctx.strokeStyle = color;
     ctx.lineWidth = 1;
     ctx.stroke();
     stepCount++;

@@ -12,7 +12,7 @@ const texts = [
   '<p style="font-size: 15px">(This took π<sup>π</sup> seconds to render)</p>'
 ];
 
-const waitingTime = 5;
+const waitingTime = 25;
 const typingText = document.getElementById("typing-text");
 const typingCursor = document.getElementById("typing-cursor");
 typingText.appendChild(typingCursor);
@@ -25,15 +25,22 @@ let fullText = "";
 function typeText() {
   if (lineIndex < texts.length) {
     const currentLine = texts[lineIndex];
-    if (typeof currentLine === "string") {
+    if (typeof currentLine === "string") 
+    {
       // Regular text line
       if (charIndex < currentLine.length) {
         fullText += currentLine[charIndex];
         typingText.innerHTML = fullText;
         typingText.append(typingCursor)
-        
         charIndex++;
-        setTimeout(typeText, waitingTime); // Delay between typing each character
+        if(lineIndex == 2 && charIndex >= 116)
+        {
+          typeText(); // Load the image faster
+        }
+        else
+        {
+          setTimeout(typeText, waitingTime); // Delay between typing each character
+        }
         typingCursor.style.left+="24px";
       } else {
         lineIndex++;

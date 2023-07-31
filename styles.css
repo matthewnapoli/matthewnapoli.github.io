@@ -13,50 +13,41 @@ body {
   width: 100%;
   height: 100%;
   margin: 0;
-  opacity: 0.5;
+  opacity: 0.9;
 }
 
-.typing-container {
-  margin: 7%;
-  text-align: start;
-  position: absolute;
-}
-
-#typing-text {
+.clickable-underline{
   color: white;
-  margin-top: 0px;
+}
+
+#typewriter{
+  position: absolute;
+  white-space: pre-wrap;
   font-size: 24px;
-  font-weight: 200;
-  margin-bottom: 400px;
-  white-space: normal;
-  overflow: hidden;
-  padding-right: 5px;
-}
+  color: white;
+  margin-left: 12%;
+  margin-top: 8%;
+  margin-right: 50%;
+  font-family: 'Source Code Pro', monospace;
 
-#typing-cursor {
-  position: static;
-  display: inline-block;
-  width: 10px;
-  height: 26px;
-  background-color: white;
-  animation: blink 1.0s infinite;
-}
-
-@keyframes blink {
-  100%, 0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
+  &:after{
+    content: "|";
+    width: 10px;
+    animation: blink 500ms linear infinite alternate;
   }
 }
 
-a {
-  color: #66ff00;
+@-webkit-keyframes blink{
+	0%{opacity: 0;}
+	100%{opacity: 1;}
 }
 
-a:hover
-{
-  color: #66ff00;
+@-moz-keyframes blink{
+	0%{opacity: 0;}
+	100%{opacity: 1;}
 }
-  
+
+@keyframes blink{
+	0%{opacity: 0;}
+	100%{opacity: 1;}
+}

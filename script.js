@@ -8,7 +8,7 @@ function setupTypewriter(t) {
         tag = "",
         writingTag = false,
         tagOpen = false,
-        typeSpeed = 0,
+        typeSpeed = 25,
         tempTypeSpeed = 0;
   
     var type = function() {

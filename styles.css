@@ -31,7 +31,7 @@ body {
   font-family: 'Source Code Pro', monospace;
 
   &:after{
-    content: "|";
+    content: "\25AE";
     width: 10px;
     animation: blink 500ms linear infinite alternate;
   }

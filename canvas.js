@@ -1,6 +1,8 @@
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
+ctx.canvas.width = window.innerWidth;
+ctx.canvas.height = window.innerWidth*5/2;
 const numSteps = ctx.canvas.width / 2 + 10;
 const stepSize = 10;
 const startX = 0;

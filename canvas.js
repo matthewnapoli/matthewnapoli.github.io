@@ -1,19 +1,11 @@
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
-ctx.canvas.width  = window.innerWidth;
-ctx.canvas.height = window.innerHeight*4;
 
 const numSteps = ctx.canvas.width / 2 + 10;
 const stepSize = 10;
 const startX = 0;
 const startY = canvas.height / 2;
 const timeInterval = 15;
-
-var Point = function(color_inp){
-  this.x = startX;
-  this.y = startY;
-  this.color = color_inp;
-}
 
 const colors = [
   '#FF1493', // Pink
@@ -30,33 +22,36 @@ const colors = [
 
 
 
-function drawRandomWalk(stPoint, steps) {
-  ctx.globalAlpha = 0.01;
-  let stepCount = 0;
-  ctx.beginPath();
-  ctx.strokeStyle = stPoint.color;
-  ctx.moveTo(stPoint.x, stPoint.y);
+function drawRandomWalk(startX, startY, color, nSteps) {
   setTimeout(drawStep, 10);
+  const steps = [[startX, startY]];
   
   function drawStep() {
-    if (stepCount >= steps) {
+    if (steps.length >= nSteps) {
       return;
     }
-
-    ctx.moveTo(stPoint.x, stPoint.y);
-    const direction = Math.random() < 0.5 ? -1 : 1;
-    stPoint.y += stepSize * direction;
-    stPoint.x = startX + stepCount * 2; 
-    ctx.lineTo(stPoint.x, stPoint.y);
+    // Draw current line
+    ctx.globalAlpha = 0.01;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
     ctx.lineWidth = 1;
+    let x = 0, y = 0;
+    for(let i = 0; i < steps.length; i++) {
+      [x, y] = steps[i];
+      if(i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
     ctx.stroke();
-    stepCount++;
+    // Compute next point
+    const direction = Math.random() < 0.5 ? -1 : 1;
+    y += stepSize * direction;
+    x = startX + steps.length * 2; 
+    steps.push([x, y]);
     requestAnimationFrame(drawStep);
   }
 }
 
 for(const color of colors)
 {
-  const startPoint = new Point(color);
-  drawRandomWalk(startPoint, numSteps);
+  drawRandomWalk(startX, startY, color, numSteps);
 }

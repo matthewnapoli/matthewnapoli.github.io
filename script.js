@@ -76,7 +76,7 @@ function setupTypewriter(t)
         
         if (writingTag === true && HTML[cursorPosition] === ">")
         {
-            tempTypeSpeed = (Math.random() * typeSpeed) + 50;
+            tempTypeSpeed = (Math.random() * typeSpeed) + 7;
             writingTag = false;
             if (tagOpen)
             {

@@ -6,8 +6,9 @@ function setupTypewriter(t)
         tag = "",
         writingTag = false,
         tagOpen = false,
-        typeSpeed = 12,
-        currentLine = 0;
+        firstLineSpeed = 200,
+        typeSpeed = 10,
+        firstLine = true;
         tempTypeSpeed = 0;
     var type = function()
     {
@@ -31,6 +32,7 @@ function setupTypewriter(t)
                 tag += HTML[cursorPosition];
             }
         }
+
         if (!writingTag && tagOpen)
         {
             const nextChars = HTML.substring(cursorPosition, cursorPosition + 5); // Extract the next 5 characters
@@ -44,15 +46,21 @@ function setupTypewriter(t)
                 tag.innerHTML += HTML[cursorPosition];
             }
         }
+
         if (!writingTag && !tagOpen)
         {
-            if (HTML[cursorPosition] === " ")
+            if(firstLine == true && cursorPosition <= 12)
             {
-                tempTypeSpeed = 0;
+                tempTypeSpeed = (Math.random() * typeSpeed) + firstLineSpeed;
+                if(cursorPosition > 12)
+                {
+                    firstLine = false
+                }
+
             }
             else
             {
-                tempTypeSpeed = (Math.random() * typeSpeed) + 50;
+                tempTypeSpeed = (Math.random() * typeSpeed) + 7;
             }
             const nextChars = HTML.substring(cursorPosition, cursorPosition + 5); // Extract the next 5 characters
             if (nextChars === "&amp;")
@@ -65,6 +73,7 @@ function setupTypewriter(t)
                 t.innerHTML += HTML[cursorPosition];
             }
         }
+        
         if (writingTag === true && HTML[cursorPosition] === ">")
         {
             tempTypeSpeed = (Math.random() * typeSpeed) + 50;

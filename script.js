@@ -7,9 +7,10 @@ function setupTypewriter(t)
         writingTag = false,
         tagOpen = false,
         firstLineSpeed = 200,
-        typeSpeed = 10,
+        typeSpeed = 9,
         firstLine = true;
         tempTypeSpeed = 0;
+
     var type = function()
     {
         if (writingTag === true)
@@ -96,6 +97,7 @@ function setupTypewriter(t)
         type: type
     };
 }
+
 var typer = document.getElementById('typewriter');
 typewriter = setupTypewriter(typewriter);
 typewriter.type();

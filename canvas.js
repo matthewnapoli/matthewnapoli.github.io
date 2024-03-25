@@ -25,32 +25,42 @@ const colors = [
 
 
 function drawRandomWalk(startX, startY, color, nSteps) {
-  setTimeout(drawStep, 10);
   const steps = [[startX, startY]];
-  
+  let alpha = 0.00;
+  const alphaIncrement = 0.01;
+
   function drawStep() {
     if (steps.length >= nSteps) {
       return;
     }
+
     // Draw current line
-    ctx.globalAlpha = 0.01;
+    ctx.globalAlpha = alpha;
     ctx.beginPath();
     ctx.strokeStyle = color;
     ctx.lineWidth = 1;
     let x = 0, y = 0;
-    for(let i = 0; i < steps.length; i++) {
+    for (let i = 0; i < steps.length; i++) {
       [x, y] = steps[i];
-      if(i === 0) ctx.moveTo(x, y);
+      if (i === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     }
     ctx.stroke();
+
     // Compute next point
     const direction = Math.random() < 0.5 ? -1 : 1;
     y += stepSize * direction;
-    x = startX + steps.length * 2; 
+    x = startX + steps.length * 2;
     steps.push([x, y]);
+
+    // Update alpha for next step
+    alpha += alphaIncrement;
+    if (alpha > 1) alpha = 1;
+
     requestAnimationFrame(drawStep);
   }
+
+  drawStep();
 }
 
 for(const color of colors)

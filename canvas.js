@@ -1,18 +1,14 @@
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
+var canvas = document.querySelector('canvas');
 
-ctx.canvas.width = window.innerWidth;
-ctx.canvas.height = window.innerWidth*5/2;
-const numSteps = ctx.canvas.width / 2 + 10;
-const stepSize = 10;
-const startX = 0;
-const startY = canvas.height / 2;
-const timeInterval = 15;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+var c = canvas.getContext('2d');
 
 const colors = [
   '#FF1493', // Pink
   '#FF00FF', // Magenta
-  '#800080', // Purple
+  '#FF0000', // Purple
   '#4B0082', // Indigo
   '#0000FF', // Blue
   '#00FFFF', // Cyan
@@ -22,48 +18,42 @@ const colors = [
   '#8B4513'  // Saddle Brown
 ];
 
+var lines = [];
 
+for(var i = 0; i < colors.length; i++) {
+  lines.push(new Line(0, window.innerHeight/2, colors[i]))
+}
 
-function drawRandomWalk(startX, startY, color, nSteps) {
-  const steps = [[startX, startY]];
-  let alpha = 0.00;
-  const alphaIncrement = 0.01;
+const speedvar = 3
+const variance = 15
 
-  function drawStep() {
-    if (steps.length >= nSteps) {
-      return;
-    }
-
-    // Draw current line
-    ctx.globalAlpha = alpha;
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 1;
-    let x = 0, y = 0;
-    for (let i = 0; i < steps.length; i++) {
-      [x, y] = steps[i];
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    // Compute next point
-    const direction = Math.random() < 0.5 ? -1 : 1;
-    y += stepSize * direction;
-    x = startX + steps.length * 2;
-    steps.push([x, y]);
-
-    // Update alpha for next step
-    alpha += alphaIncrement;
-    if (alpha > 1) alpha = 1;
-
-    requestAnimationFrame(drawStep);
+function Line(x,y,color) {
+  this.x = x
+  this.y = y
+  this.color = color
+  
+  this.draw = function(){
+    c.beginPath()
+    c.moveTo(this.x, this.y);
+    c.strokeStyle = this.color;
   }
 
-  drawStep();
+  this.update = function() {
+    c.moveTo(this.x, this.y);
+    this.x += (Math.random() * speedvar);
+    this.y += ((Math.random() - 0.5)* variance);
+    c.lineTo(this.x,this.y);
+    c.stroke();
+
+    this.draw()
+  }
 }
 
-for(const color of colors)
-{
-  drawRandomWalk(startX, startY, color, numSteps);
+function animate() {
+  requestAnimationFrame(animate);
+  for(var i = 0; i < lines.length; i++) {
+    lines[i].update();
+  }
 }
+
+animate();

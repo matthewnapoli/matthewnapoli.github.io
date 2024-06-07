@@ -1,45 +1,39 @@
-function setupTypewriter(t)
-{
-    var HTML = t.innerHTML;
-    t.innerHTML = ""
-    var cursorPosition = 0;
-    writingTag = false;
-    firstLineTO = 200;
-    normTO = 10;
-    firstLine = true;
+// function setupTypewriter(t)
+// {
+//     var HTML = t.innerHTML;
+//     t.innerHTML = "";
+//     var firstLine = HTML.substr(0,12);
+//     var theRest = HTML.substr(12)
+//     var cursorPosition = 0;
+//     var str = "";
+//     var string_count = "";
+//     var highlight  = '<mark style="background: #ffffff">';
+//     var highlight_end = '</mark>';
 
-    speed = normTO;
-    
+//     var type = function()
+//     {
+//         if(cursorPosition < 12) {
+//             str = firstLine[cursorPosition]
+//         }
+//         else {
+//             str = theRest
+//         }
 
-    var type = function()
-    {
-        if(HTML[0] == "<") {
-        t.innerHTML += HTML[cursorPosition]
-        cursorPosition++;
+//         string_count += str
+//         processed_string = highlight + string_count + highlight_end
+//         t.innerHTML = processed_string
+//         cursorPosition++;
         
-        if (cursorPosition < HTML.length - 1)
-        {
-            setTimeout(type, speed);
-        }
-    };
-    return {
-        type: type
-    };
-}
+//         if (cursorPosition < HTML.length - 1)
+//         {
+//             setTimeout(type, 200);
+//         }
+//     };
+//     return {
+//         type: type
+//     };
+// }
 
-function getOuterTags(htmlString) {
-    const regex = /<[^>]+>/g;
-    const tags = htmlString.match(regex);
-
-    if (!tags || tags.length < 2) {
-        return null; // Not enough tags
-    }
-
-    const outerTags = [tags[0], tags[tags.length - 1]];
-
-    return outerTags;
-}
-
-var typer = document.getElementById('typewriter');
-typewriter = setupTypewriter(typewriter);
-typewriter.type("");
+// var typer = document.getElementById('typewriter');
+// typewriter = setupTypewriter(typewriter);
+// typewriter.type();

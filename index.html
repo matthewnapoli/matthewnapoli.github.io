@@ -26,7 +26,6 @@
             left: 6%;
             font-size: 130%;
             color: white;
-            background: black;
             text-align: left;
             z-index: 1;
         }
@@ -37,8 +36,12 @@
         }
 
         .clickable-underline {
-            color: white;
+            color: black;
             text-decoration: underline;
+        }
+
+        .mark {
+          background: black;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,400;1,300&display=swap" rel="stylesheet">
@@ -48,7 +51,8 @@
 <body>
 <canvas></canvas>
 <script src="canvas.js"></script>
-<div id="typewriter">Hello World!<br><br>
+  <div id="typewriter">
+    <mark style="background: #ffffff!important">Hello World!<br><br>
 
     My name is Matthew Napoli.<br><br>
 
@@ -62,8 +66,7 @@
     <a href="https://leetcode.com/matthewzz/" class="clickable-underline">Leetcode</a><br>
     <a href="blog/blog1.html" class="clickable-underline">Equity Research</a><br><br>
     
-    (This took π<sup>π</sup> seconds to render) </div>
-    
+    (This took π<sup>π</sup> seconds to render) </mark></div></mark>
 <script src="script.js"></script>
 </body>
 

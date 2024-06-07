@@ -8,59 +8,38 @@ function setupTypewriter(t)
     normTO = 10;
     firstLine = true;
 
-
     speed = normTO;
     
 
     var type = function()
     {
-        if(cursorPosition < 13) {
-            speed = firstLineTO;
-        } else {
-            speed = normTO;
-        }
-
-        if(HTML[cursorPosition] == "<"){
-            dealWTag()
-            if (cursorPosition < HTML.length - 1)
-                {
-                    setTimeout(type, speed);
-                }
-        } 
-        else 
-        {
-            t.innerHTML += HTML[cursorPosition]
-            cursorPosition++;
-            if (cursorPosition < HTML.length - 1)
-                {
-                    setTimeout(type, speed);
-                }
-        }
-
-
+        if(HTML[0] == "<") {
+        t.innerHTML += HTML[cursorPosition]
+        cursorPosition++;
         
-    };
-
-    var dealWTag = function() { 
-        tag = "";
-            for(i = cursorPosition; HTML[cursorPosition] != ">"; cursorPosition++){
-                tag += HTML[cursorPosition];
-            }
-
-        if(tag != "<br>") {
-            tag += HTML[cursorPosition];
-            t.innerHTML += tag;
-            console.log(tag)
-            cursorPosition++;
+        if (cursorPosition < HTML.length - 1)
+        {
+            setTimeout(type, speed);
         }
-    }
-
-
+    };
     return {
         type: type
     };
 }
 
+function getOuterTags(htmlString) {
+    const regex = /<[^>]+>/g;
+    const tags = htmlString.match(regex);
+
+    if (!tags || tags.length < 2) {
+        return null; // Not enough tags
+    }
+
+    const outerTags = [tags[0], tags[tags.length - 1]];
+
+    return outerTags;
+}
+
 var typer = document.getElementById('typewriter');
 typewriter = setupTypewriter(typewriter);
-typewriter.type();
+typewriter.type("");

@@ -22,16 +22,23 @@ function setupTypewriter(t)
 
         if(HTML[cursorPosition] == "<"){
             dealWTag()
-        } else {
+            if (cursorPosition < HTML.length - 1)
+                {
+                    setTimeout(type, speed);
+                }
+        } 
+        else 
+        {
             t.innerHTML += HTML[cursorPosition]
             cursorPosition++;
+            if (cursorPosition < HTML.length - 1)
+                {
+                    setTimeout(type, speed);
+                }
         }
 
 
-        if (cursorPosition < HTML.length - 1)
-        {
-            setTimeout(type, speed);
-        }
+        
     };
 
     var dealWTag = function() { 
@@ -39,10 +46,13 @@ function setupTypewriter(t)
             for(i = cursorPosition; HTML[cursorPosition] != ">"; cursorPosition++){
                 tag += HTML[cursorPosition];
             }
-            tag += HTML[cursorPosition]
+
+        if(tag != "<br>") {
+            tag += HTML[cursorPosition];
             t.innerHTML += tag;
             console.log(tag)
             cursorPosition++;
+        }
     }
 
 

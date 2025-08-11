@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matthew Napoli</title>
+    <style type="text/css">
+        canvas {
+            border: 0;
+            background: #030303;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Source Code Pro', monospace;
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+
+        #typewriter {
+            position: relative;
+            margin-top: 8vh;
+            margin-left: 6vw;
+            font-size: 130%;
+            text-align: left;
+            z-index: 1;
+            max-width: 90vw;
+            word-break: break-word;
+        }
+
+        .clickable-underline {
+            color: white;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            #typewriter {
+                margin-top: 10vh;
+                margin-left: 5vw;
+                font-size: 110%;
+                max-width: 98vw;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,400;1,300&display=swap" rel="stylesheet">
+</head>
+
+
+<body>
+    <canvas></canvas>
+    <div id="typewriter">
+    <mark style="background: #000000; color: #ffffff;">
+            Hello World!<br><br>
+
+            My name is Matthew Napoli.<br><br>
+
+            I'm currently a student at Carnegie Mellon's M.S. in Computational Finance program. <br><br>
+            
+            My interests include:<br><br>
+        
+            - Stochastic processes<br>
+            - Game theory<br>
+            - Financial markets<br>
+            - Algorithmic trading<br><br>
+             
+            I also hold a a B.S. in <u>Mathematics & Economics</u> w/ a specialization in <u>Computing</u> from UCLA. <br>
+            (Go Bruins!<img src="img/bruin-logo.png" alt="Bruin Logo" style="height:1em;vertical-align:middle;">)<br><br>
+
+            Here are some useful links of mine: <br> <br>
+
+            <a href="\Matthew_Napoli_Resume_2026.pdf" class="clickable-underline">- Resume</a><br>
+            <a href="https://www.linkedin.com/in/matthew--napoli/" class="clickable-underline">- LinkedIn</a><br>
+            <a href="https://github.com/matthewnapoli" class="clickable-underline">- Github</a><br>
+            <a href="https://leetcode.com/matthewzz0/" class="clickable-underline">- Leetcode</a><br>
+            <br>
+        </mark>
+    </div>
+    <script src="canvas.js"></script>
+    <script src="script.js"></script>
+</body>
+
+
+</html>

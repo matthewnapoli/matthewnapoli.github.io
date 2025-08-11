@@ -1,59 +1,74 @@
-var canvas = document.querySelector('canvas');
 
+const canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
-var c = canvas.getContext('2d');
+const c = canvas.getContext('2d');
 
 const colors = [
-  '#FF1493', // Pink
-  '#FF00FF', // Magenta
-  '#FF0000', // Purple
-  '#4B0082', // Indigo
-  '#0000FF', // Blue
-  '#00FFFF', // Cyan
-  '#00FF00', // Green
-  '#FFFF00', // Yellow
-  '#FF7F00', // Orange
-  '#8B4513'  // Saddle Brown
+  '#ff0000ff',
+  '#ee6b00ff',
+  '#e5ff00ff',
+  '#2eb700ff',
+  '#0077ffff',
+  '#6d00cdff',
+  '#371c00ff',
 ];
 
-var lines = [];
+const speedvar = 1.75;
+let baseVariance = 3; // Start with a very small variance
+let varianceGrowth = 1.005; // Growth rate per frame (tweak as desired)
+let variance = baseVariance;
 
-for(var i = 0; i < colors.length; i++) {
-  lines.push(new Line(0, window.innerHeight/2, colors[i]))
-}
-
-const speedvar = 3
-const variance = 15
-
-function Line(x,y,color) {
-  this.x = x
-  this.y = y
-  this.color = color
-  
-  this.draw = function(){
-    c.beginPath()
-    c.moveTo(this.x, this.y);
-    c.strokeStyle = this.color;
+class RandomWalkLine {
+  constructor(y, color) {
+    this.y = y;
+    this.prevY = y;
+    this.color = color;
   }
 
-  this.update = function() {
-    c.moveTo(this.x, this.y);
-    this.x += (Math.random() * speedvar);
-    this.y += ((Math.random() - 0.5)* variance);
-    c.lineTo(this.x,this.y);
-    c.stroke();
+  update(dy) {
+    this.prevY = this.y;
+    this.y += dy;
+  }
 
-    this.draw()
+  draw(ctx, prevX, currX) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(prevX, this.prevY);
+    ctx.lineTo(currX, this.y);
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = 2;
+    ctx.globalAlpha = 0.8;
+    ctx.stroke();
+    ctx.restore();
   }
 }
+
+const lines = colors.map(
+  (color, i) => new RandomWalkLine(canvas.height / 2, color)
+);
+
+let sharedX = 0;
+let prevSharedX = 0;
 
 function animate() {
-  requestAnimationFrame(animate);
-  for(var i = 0; i < lines.length; i++) {
-    lines[i].update();
+  // Fading trail effect: draw a less transparent black rectangle for slower fading
+  c.fillStyle = 'rgba(0, 0, 0, 0.006)';
+  c.fillRect(0, 0, canvas.width, canvas.height);
+  // Exponentially increase variance
+  variance *= varianceGrowth;
+  // Move shared x for all lines
+  if (variance >= 35) {
+    variance = 35; // Cap the variance to prevent excessive growth
   }
+  prevSharedX = sharedX;
+  sharedX += speedvar;
+  for (let line of lines) {
+    const dy = (Math.random() - 0.5) * variance;
+    line.update(dy);
+    line.draw(c, prevSharedX, sharedX);
+  }
+  requestAnimationFrame(animate);
 }
 
 animate();

@@ -193,15 +193,27 @@
         }
 
         .page-actions {
+            position: relative;
+            z-index: 1;
             display: flex;
-            justify-content: flex-end;
-            margin-top: 1rem;
+            justify-content: flex-start;
+            margin: 1rem 0 8vh 0;
         }
 
         .page-actions button {
-            min-height: 1.75rem;
+            background: #050505;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #ffffff;
+            cursor: pointer;
+            font-family: 'Source Code Pro', monospace;
             font-size: 0.78rem;
+            min-height: 1.75rem;
+            min-width: auto;
             padding: 0.15rem 0.45rem;
+        }
+
+        .page-actions button:hover {
+            border-color: #ffffff;
         }
 
         .invalid {

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects (in decreasing levels of complexity)</title>
+    <style type="text/css">
+        canvas {
+            border: 0;
+            background: #030303;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Source Code Pro', monospace;
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+
+        #projects {
+            position: relative;
+            margin-top: 8vh;
+            margin-left: 6vw;
+            font-size: 130%;
+            text-align: left;
+            z-index: 1;
+            max-width: 90vw;
+            word-break: break-word;
+        }
+
+        .clickable-underline {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .page-actions {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: flex-start;
+            margin: 1rem 0 8vh 6vw;
+        }
+
+        .page-actions button {
+            background: #050505;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #ffffff;
+            cursor: pointer;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.78rem;
+            min-height: 1.75rem;
+            padding: 0.15rem 0.45rem;
+        }
+
+        .page-actions button:hover {
+            border-color: #ffffff;
+        }
+
+        @media (max-width: 600px) {
+            #projects {
+                margin-top: 10vh;
+                margin-left: 5vw;
+                font-size: 110%;
+                max-width: 98vw;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,400;1,300&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <canvas></canvas>
+    <div id="projects">
+        <mark style="background: #000000; color: #ffffff;">
+            Projects (in decreasing levels of complexity)<br><br>
+
+            <a href="options-greeks.html" class="clickable-underline">- Options/Greeks Visualizer</a><br>
+            <br>
+            <a href="index.html" class="clickable-underline">- Back home</a><br>
+        </mark>
+    </div>
+    <div class="page-actions">
+        <button id="disable-brownian" type="button">disable brownian motion animation</button>
+    </div>
+    <script src="canvas.js"></script>
+</body>
+</html>

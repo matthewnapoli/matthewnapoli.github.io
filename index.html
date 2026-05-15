@@ -36,9 +36,58 @@
             word-break: break-word;
         }
 
+        .list-line {
+            display: inline-block;
+            margin-bottom: 0.35rem;
+        }
+
+        #headshot-frame {
+            position: absolute;
+            top: 6vh;
+            right: 16vw;
+            padding: 0.45rem;
+            background: #171717;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 12px;
+            z-index: 1;
+        }
+
+        #headshot {
+            width: min(22vw, 260px);
+            aspect-ratio: 1 / 1;
+            display: block;
+            object-fit: cover;
+            object-position: center 30%;
+            border-radius: 8px;
+        }
+
         .clickable-underline {
             color: white;
             text-decoration: underline;
+        }
+
+        .page-actions {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-start;
+            margin: 1rem 0 8vh 6vw;
+        }
+
+        .page-actions button {
+            background: #050505;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #ffffff;
+            cursor: pointer;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.78rem;
+            min-height: 1.75rem;
+            padding: 0.15rem 0.45rem;
+        }
+
+        .page-actions button:hover {
+            border-color: #ffffff;
         }
 
         @media (max-width: 600px) {
@@ -48,6 +97,20 @@
                 font-size: 110%;
                 max-width: 98vw;
             }
+
+            #headshot-frame {
+                position: relative;
+                top: auto;
+                right: auto;
+                display: block;
+                width: fit-content;
+                width: min(55vw, 220px);
+                margin: 5vw 0 0 5vw;
+            }
+
+            #headshot {
+                width: 100%;
+            }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,400;1,300&display=swap" rel="stylesheet">
@@ -56,32 +119,41 @@
 
 <body>
     <canvas></canvas>
+    <div id="headshot-frame">
+        <img id="headshot" src="img/signature-headshot.jpg" alt="Matthew Napoli headshot">
+    </div>
     <div id="typewriter">
     <mark style="background: #000000; color: #ffffff;">
             Hello World!<br><br>
 
             My name is Matthew Napoli.<br><br>
 
-            I'm currently a student at Carnegie Mellon's M.S. in Computational Finance program. <br><br>
+            I'm currently a student at Carnegie Mellon's M.S. in<br>
+            Computational Finance program. <br><br>
             
-            My interests include:<br><br>
+            Here are some useful links of mine: <br> <br>
 
-            - Algorithmic trading<br>
-            - Financial markets<br>
-            - Game theory<br>
-            - Stochastic processes<br><br>
-             
+            <a href="\Matthew_Napoli_Resume_2026.pdf" class="clickable-underline list-line">- Resume</a><br>
+            <a href="projects.html" class="clickable-underline list-line">- Projects</a><br>
+            <a href="https://www.linkedin.com/in/matthew--napoli/" class="clickable-underline list-line">- LinkedIn</a><br>
+            <a href="https://github.com/matthewnapoli" class="clickable-underline list-line">- Github</a><br>
+            <a href="https://leetcode.com/matthewzz0/" class="clickable-underline list-line">- Leetcode</a><br>
+            <br>
+
             I also hold a a B.S. in <u>Mathematics & Economics</u> w/ a specialization in <u>Computing</u> from UCLA. <br>
             (Go Bruins!<img src="img/bruin-logo.png" alt="Bruin Logo" style="height:1em;vertical-align:middle;">)<br><br>
 
-            Here are some useful links of mine: <br> <br>
+            My interests include:<br><br>
 
-            <a href="\Matthew_Napoli_Resume_2026.pdf" class="clickable-underline">- Resume</a><br>
-            <a href="https://www.linkedin.com/in/matthew--napoli/" class="clickable-underline">- LinkedIn</a><br>
-            <a href="https://github.com/matthewnapoli" class="clickable-underline">- Github</a><br>
-            <a href="https://leetcode.com/matthewzz0/" class="clickable-underline">- Leetcode</a><br>
+            <span class="list-line">- Algorithmic trading</span><br>
+            <span class="list-line">- Financial markets</span><br>
+            <span class="list-line">- Game theory</span><br>
+            <span class="list-line">- Stochastic processes</span><br>
             <br>
         </mark>
+    </div>
+    <div class="page-actions">
+        <button id="disable-brownian" type="button">disable brownian motion animation</button>
     </div>
     <script src="canvas.js"></script>
     <script src="script.js"></script>

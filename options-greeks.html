@@ -18,7 +18,7 @@
     .summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:.9rem;row-gap:.55rem}.metric{display:grid;grid-template-columns:1fr auto auto;gap:.6rem;align-items:center;min-height:2.2rem}.metric button{min-width:4.3rem}
     .metric-label{display:flex;align-items:center;gap:.35rem}.metric-formula{display:inline-grid;grid-template-rows:auto auto;line-height:1;text-align:center}.metric-formula span:first-child{border-bottom:1px solid #fff;padding-bottom:.08rem}.metric-formula span:last-child{padding-top:.08rem}
     .legs-header,.leg{display:grid;grid-template-columns:minmax(82px,.75fr) minmax(82px,.75fr) minmax(72px,.6fr) repeat(3,minmax(86px,1fr)) 2.4rem;gap:.45rem;align-items:center}.legs-header{margin-bottom:.5rem;font-size:.75rem;opacity:.75}.leg{margin-top:.45rem}.leg button{min-width:2.2rem;padding-left:0;padding-right:0}
-    .plot-controls{display:grid;grid-template-columns:repeat(3,minmax(150px,1fr));gap:.75rem;align-items:end;margin-bottom:.6rem}.range-row{display:grid;grid-template-columns:1fr auto;gap:.6rem;align-items:center}.range-row output{min-width:4.5rem;text-align:right}.range-row input{padding:0}
+    .plot-controls{display:grid;grid-template-columns:repeat(2,minmax(150px,1fr));gap:.75rem;align-items:end;margin-bottom:.6rem}.range-row{display:grid;grid-template-columns:1fr auto;gap:.6rem;align-items:center}.range-row output{min-width:4.5rem;text-align:right}.range-row input{padding:0}
     .plot-wrap{min-height:420px}.plot-wrap button{min-width:8rem}#add-leg{min-height:1.75rem;min-width:5.5rem;padding:.15rem .45rem}#plot{width:100%;height:420px}
     .page-actions{position:relative;z-index:1;display:flex;justify-content:flex-start;margin:1rem 0 8vh}.page-actions button{font-size:.78rem;min-height:1.75rem;min-width:auto;padding:.15rem .45rem}.invalid{color:#ff7777;margin-top:.35rem}.invalid:empty{display:none}.muted{font-size:.75rem;opacity:.7}
     @media(max-width:900px){.toolbar,.summary,.plot-controls{grid-template-columns:1fr 1fr}.section-heading{align-items:stretch;flex-direction:column}.legs-header{display:none}.leg{grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,255,255,.2);padding-top:.75rem}}
@@ -43,7 +43,6 @@
   <div class="section-block"><div class="section-heading"><h2 class="section-title">Visualization:</h2><button id="plot-payoff" type="button">plot payoff</button></div>
     <section class="plot-controls">
       <label>X-axis<select id="plot-axis"><option value="moneyness">moneyness (S/K)</option><option value="spot">spot</option><option value="tau">tau (TTE)</option></select></label>
-      <label id="as-of-label">As-of date<input id="as-of-date" type="date"></label>
       <label id="tte-control">TTE override (years)<span class="range-row"><input id="tte-slider" type="range" min="0" max="2" step="0.01" value="0.5"><output id="tte-output">0.50</output></span><span class="muted">Applied to spot and moneyness plots.</span></label>
     </section>
     <section class="plot-wrap"><div id="plot"></div></section>

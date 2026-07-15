@@ -3,7 +3,7 @@ const metricLayout=[['cost','delta','gamma'],['vega','theta','rho'],['volga','va
 const $=id=>document.getElementById(id);
 const legsElement=$('legs'),summaryElement=$('summary'),invalidElement=$('invalid');
 const spotInput=$('spot'),rateInput=$('rate'),volatilityInput=$('volatility'),multiplierInput=$('multiplier');
-const plotPayoffButton=$('plot-payoff'),plotAxisInput=$('plot-axis'),asOfInput=$('as-of-date'),tteSlider=$('tte-slider'),tteOutput=$('tte-output'),tteControl=$('tte-control');
+const plotPayoffButton=$('plot-payoff'),plotAxisInput=$('plot-axis'),tteSlider=$('tte-slider'),tteOutput=$('tte-output'),tteControl=$('tte-control');
 let activeMetric='delta';
 let legs=[{kind:'call',side:'buy',qty:1,strike:100,time:.5,dividend:0}];
 
@@ -44,5 +44,5 @@ function plotPayoff(spot){const min=Math.max(.01,spot*.45),max=spot*1.55,steps=1
 function updateControls(){const tau=plotAxisInput.value==='tau';tteControl.style.opacity=tau?.45:1;tteSlider.disabled=tau;tteOutput.value=selectedTte().toFixed(2)}
 function update(){updateControls();const totals=calculatePortfolio();invalidElement.textContent=totals?'':'invalid inputs';renderSummary(totals);plotMetric()}
 $('add-leg').onclick=()=>{legs.push({kind:'call',side:'buy',qty:1,strike:toNumber(spotInput.value)||100,time:.5,dividend:0});renderLegs();update()};plotPayoffButton.onclick=()=>{activeMetric='payoff';update()};
-[spotInput,rateInput,volatilityInput,multiplierInput,plotAxisInput,asOfInput,tteSlider].forEach(input=>input.addEventListener('input',update));
-asOfInput.value=new Date().toISOString().slice(0,10);renderLegs();update();
+[spotInput,rateInput,volatilityInput,multiplierInput,plotAxisInput,tteSlider].forEach(input=>input.addEventListener('input',update));
+renderLegs();update();

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Options Trading Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#030303;color:#fff;font-family:'Source Code Pro',monospace}canvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:0}main{position:relative;z-index:1;width:min(1450px,95vw);margin:4vh auto 8vh}.panel{background:#000;border:1px solid #444;padding:1rem}.grid{display:grid;gap:.8rem}.top{grid-template-columns:1.1fr 1fr 1fr}.stats{grid-template-columns:repeat(6,1fr)}.trade-grid{grid-template-columns:1fr 1.4fr}.scenario{grid-template-columns:repeat(5,1fr)}label{display:grid;gap:.3rem;font-size:.8rem}input,select,button{background:#070707;color:#fff;border:1px solid #555;padding:.45rem;font:inherit}button{cursor:pointer}button:hover{border-color:#fff}h1,h2,h3{font-weight:400;margin:.2rem 0 .8rem}.muted{opacity:.7;font-size:.75rem}.stat b{display:block;font-size:1.05rem;margin-top:.25rem}.table-wrap{overflow:auto;max-height:420px}table{width:100%;border-collapse:collapse;font-size:.78rem}th,td{border-bottom:1px solid #282828;padding:.45rem;text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}.pos{color:#7dff9a}.neg{color:#ff8080}.controls{display:flex;gap:.5rem;flex-wrap:wrap;align-items:end}.checkbox{display:flex;gap:.5rem;align-items:center}.checkbox input{width:auto}.log{height:160px;overflow:auto;font-size:.75rem;white-space:pre-wrap}.scenario-card{border:1px solid #333;padding:.7rem}.scenario-card b{display:block;margin-bottom:.3rem}.trade-row{display:grid;grid-template-columns:1.3fr .65fr .65fr auto;gap:.4rem;margin-bottom:.45rem}.hidden{display:none}.warning{color:#ffcb6b}.ok{color:#7dff9a}#price-chart,#pnl-chart{height:300px}@media(max-width:1000px){.top,.trade-grid,.stats,.scenario{grid-template-columns:1fr 1fr}}@media(max-width:650px){.top,.trade-grid,.stats,.scenario{grid-template-columns:1fr}.trade-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body><canvas></canvas><main>
+<h1>Options Trading Simulator</h1><a href="projects.html" style="color:white">- Back to projects</a>
+<div class="grid top" style="margin-top:1rem">
+<section class="panel"><h2>Session</h2><div class="controls">
+<label>Ticker<input id="ticker" value="AAPL"></label>
+<label>Initial spot<input id="start-spot" type="number" value="100" step="0.01"></label>
+<label>Initial vol %<input id="start-vol" type="number" value="25" step="0.1"></label>
+<label>Steps<input id="steps" type="number" value="120" min="20" max="500"></label>
+</div><p class="checkbox"><input id="sellside" type="checkbox"><span>Activate sell-side mode (start with 10 option positions)</span></p>
+<div class="controls"><button id="new-session">New session</button><label>CSV spot/vol data<input id="csv" type="file" accept=".csv"></label></div>
+<p class="muted">CSV columns: date, spot, vol. Vol may be decimal or percentage. Without CSV, a seeded replay path is generated.</p></section>
+<section class="panel"><h2>Game clock</h2><div id="clock">Step 0 / 0</div><div id="date"></div><div class="controls" style="margin-top:.8rem"><button id="submit">Submit trades + next step</button><button id="step-only">Next step</button><button id="reset">Reset</button></div><p id="status" class="muted"></p></section>
+<section class="panel"><h2>Market</h2><div class="grid stats"><div class="stat">Spot<b id="spot">--</b></div><div class="stat">Vol<b id="vol">--</b></div><div class="stat">Cash<b id="cash">--</b></div><div class="stat">NAV<b id="nav">--</b></div><div class="stat">P&amp;L<b id="pnl">--</b></div><div class="stat">Spot position<b id="spot-pos">--</b></div></div></section>
+</div>
+<div class="grid trade-grid" style="margin-top:.8rem">
+<section class="panel"><h2>Trade ticket</h2><div class="trade-row"><select id="trade-instrument"><option value="SPOT">SPOT</option></select><input id="trade-qty" type="number" placeholder="qty" step="1"><select id="trade-side"><option value="buy">buy</option><option value="sell">sell</option></select><button id="queue">Queue</button></div><div id="queued" class="log"></div></section>
+<section class="panel"><h2>Portfolio Greeks</h2><div class="grid stats"><div class="stat">Delta<b id="delta">--</b></div><div class="stat">Gamma<b id="gamma">--</b></div><div class="stat">Vega<b id="vega">--</b></div><div class="stat">Theta/day<b id="theta">--</b></div><div class="stat">Rho<b id="rho">--</b></div><div class="stat">Option MV<b id="option-mv">--</b></div></div><h3 style="margin-top:1rem">Greeks by spot move</h3><div id="scenario-grid" class="grid scenario"></div></section>
+</div>
+<div class="grid trade-grid" style="margin-top:.8rem">
+<section class="panel"><h2>Option market</h2><div class="table-wrap"><table><thead><tr><th>Instrument</th><th>Type</th><th>K</th><th>Barrier</th><th>TTE</th><th>Bid</th><th>Ask</th><th>Position</th><th>Delta</th><th>Gamma</th><th>Vega</th></tr></thead><tbody id="option-table"></tbody></table></div></section>
+<section class="panel"><h2>Positions</h2><div class="table-wrap"><table><thead><tr><th>Instrument</th><th>Qty</th><th>Mid</th><th>Market value</th><th>P&amp;L impact</th></tr></thead><tbody id="positions"></tbody></table><h3>Trade log</h3><div id="trade-log" class="log"></div></section>
+</div>
+<div class="grid trade-grid" style="margin-top:.8rem"><section class="panel"><div id="price-chart"></div></section><section class="panel"><div id="pnl-chart"></div></section></div>
+<p class="muted warning">Educational simulation only. Barrier pricing is intentionally simplified and historical data must be supplied by CSV in this browser-only version.</p>
+</main><script src="canvas.js"></script><script src="options-trading-sim.js"></script></body></html>

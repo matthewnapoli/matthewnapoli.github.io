@@ -42,8 +42,8 @@
   <div class="section-block"><h2 class="section-title">Greeks:</h2><section class="greeks-panel"><div class="summary" id="summary"></div></section></div>
   <div class="section-block"><div class="section-heading"><h2 class="section-title">Visualization:</h2><button id="plot-payoff" type="button">plot payoff</button></div>
     <section class="plot-controls">
-      <label>X-axis<select id="plot-axis"><option value="moneyness">moneyness (S/K)</option><option value="spot">spot</option><option value="tau">tau (TTE)</option></select></label>
-      <label id="tte-control">TTE override (years)<span class="range-row"><input id="tte-slider" type="range" min="0" max="2" step="0.01" value="0.5"><output id="tte-output">0.50</output></span><span class="muted">Applied to spot and moneyness plots.</span></label>
+      <label>X-axis<select id="plot-axis"><option value="moneyness">moneyness (S/K)</option><option value="spot">spot</option><option value="tau">tau (TTE)</option><option value="vol">implied vol</option><option value="rate">rate</option></select></label>
+      <label id="tte-control">TTE override (years)<span class="range-row"><input id="tte-slider" type="range" min="0" max="2" step="0.01" value="0.5"><output id="tte-output">0.50</output></span><span class="muted">Applied to spot, moneyness, vol, and rate plots.</span></label>
     </section>
     <section class="plot-wrap"><div id="plot"></div></section>
   </div>

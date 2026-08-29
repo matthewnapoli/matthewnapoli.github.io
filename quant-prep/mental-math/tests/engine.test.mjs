@@ -81,6 +81,10 @@ assert.equal(factSummary(breakdownProfile, "times:7x8").attempts, 1, "a retried 
 assert.equal(factSummary(breakdownProfile, "times:7x8").correct, 0, "a step completed after retries counts as one first-try miss");
 recordBreakdownStep(breakdownProfile, { prompt: "56 ÷ 7 = ?", answer: 8 }, true, 1800, "worksheet-2");
 assert.equal(factSummary(breakdownProfile, "times:7x8").attempts, 2, "division and multiplication share the same fact cell");
+recordBreakdownStep(breakdownProfile, { prompt: "225 ÷ 15 = ?", answer: 15, factKey: "times:15x15" }, true, 1900, "fact-helper-1");
+assert.equal(factSummary(breakdownProfile, "times:15x15").attempts, 1, "base fact helper records multiplication and division through 15 × 15");
+recordBreakdownStep(breakdownProfile, { prompt: "20² = ?", answer: 400, factKey: "square:20" }, true, 1800, "fact-helper-2");
+assert.equal(factSummary(breakdownProfile, "square:20").attempts, 1, "base fact helper records emphasized squares through 20²");
 recordBreakdownStep(breakdownProfile, { prompt: "84 + 16 = ?", answer: 100 }, true, 2200, "worksheet-3");
 recordBreakdownStep(breakdownProfile, { prompt: "84 − 16 = ?", answer: 68 }, true, 2200, "worksheet-4");
 assert.equal(factSummary(breakdownProfile, "add:84x16").attempts, 1, "addition records one directional cell in the 100 × 100 addition matrix");

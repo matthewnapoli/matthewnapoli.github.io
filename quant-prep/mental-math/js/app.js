@@ -13,7 +13,8 @@ const state = {
     timer: null,
     filters: { type: "all", operator: "all", result: "all", gap: "all", difficulty: "all", period: "all", mode: "all" },
     sort: { key: "date", direction: "desc" },
-    factMatrix: "addition"
+    factMatrix: "addition",
+    factDrill: null
 };
 
 const esc = (value) => String(value ?? "").replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
@@ -33,7 +34,8 @@ function setView(view) {
 function updateChrome() {
     nav?.querySelectorAll("button").forEach(button => button.classList.toggle("active", button.dataset.view === state.view || (state.view === "dashboard" && button.dataset.view === "dashboard")));
     const attempts = state.profile.history.length;
-    profileStatus.innerHTML = `<span class="status-dot"></span>${attempts ? `${attempts} attempts saved` : "Local profile ready"}`;
+    const factAttempts = Object.values(state.profile.breakdownFacts || {}).reduce((sum, fact) => sum + (fact.attempts || 0), 0);
+    profileStatus.innerHTML = `<span class="status-dot"></span>${attempts ? `${attempts} attempts saved` : factAttempts ? `${factAttempts} fact attempts saved` : "Local profile ready"}`;
 }
 
 function modeCard({ title, eyebrow, description, action, button, tone = "mint", detail }) {
@@ -70,6 +72,7 @@ function renderDashboard() {
         <div class="mode-grid">
             ${modeCard({ title: "Learn", eyebrow: "Adaptive practice", description: "Immediate feedback, progressive scaffolding, and strategy coaching that fades as your mastery grows.", action: "start-learn", button: "Start adaptive session", detail: `<span>No score pressure</span><span>Keyboard-first</span>` })}
             ${modeCard({ title: "Test", eyebrow: "Trader assessment", description: "A timed, low-noise assessment. No hints or explanations until the test is complete.", action: "test-setup", button: "Configure test", tone: "amber", detail: `<span>Accuracy first</span><span>15-second question cap</span>` })}
+            ${modeCard({ title: "Base Facts", eyebrow: "Retrieval helper", description: "Make multiplication and division through 15 × 15 automatic, then lock in squares from 15² through 20².", action: "start-facts", button: "Drill base facts", detail: `<span>30 prompts</span><span>Updates mastery grid</span>` })}
         </div>
     </section>
     <section class="lower-grid">
@@ -85,6 +88,82 @@ function renderDashboard() {
             <button class="button secondary" data-action="start-focus">Practice weak areas</button>
         </article>
     </section>`;
+}
+
+function factCandidates() {
+    const times = Array.from({ length: 15 }, (_, leftIndex) => Array.from({ length: 15 }, (_, rightIndex) => {
+        const left = leftIndex + 1;
+        const right = rightIndex + 1;
+        return { key: `times:${left}x${right}`, left, right, answer: left * right, kind: "times" };
+    })).flat();
+    const squares = Array.from({ length: 6 }, (_, index) => {
+        const value = index + 15;
+        return { key: `square:${value}`, left: value, right: value, answer: value * value, kind: "square" };
+    });
+    return [...times, ...squares];
+}
+
+function selectFactQuestion(excludeKey = null) {
+    const squareTurn = state.factDrill.index % 6 === 5;
+    const candidates = factCandidates().filter(item => item.key !== excludeKey && (squareTurn ? item.kind === "square" : item.kind === "times")).map(item => ({ ...item, stat: factSummary(state.profile, item.key), noise: Math.random() * 8 }));
+    candidates.sort((a, b) => a.stat.attempts - b.stat.attempts || a.stat.rating - b.stat.rating || a.noise - b.noise);
+    const item = candidates[0];
+    if (item.kind === "square") return { ...item, prompt: `${item.left}²`, operation: "square" };
+    const useDivision = state.factDrill.index % 2 === 1;
+    return useDivision
+        ? { ...item, prompt: `${item.answer} ÷ ${item.left}`, operation: "division", answer: item.right }
+        : { ...item, prompt: `${item.left} × ${item.right}`, operation: "multiplication" };
+}
+
+function startFactDrill() {
+    clearTimer();
+    state.view = "fact-drill";
+    state.factDrill = { id: `facts-${Date.now().toString(36)}`, index: 0, total: 30, correct: 0, question: null, feedback: null, startedAt: Date.now() };
+    state.factDrill.question = selectFactQuestion();
+    render();
+    window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function submitFactAnswer(rawAnswer) {
+    const drill = state.factDrill;
+    if (!drill || drill.feedback) return;
+    const responseMs = Date.now() - drill.startedAt;
+    const value = Number(String(rawAnswer).replaceAll(",", "").trim());
+    const correct = Number.isFinite(value) && value === drill.question.answer;
+    recordBreakdownStep(state.profile, { prompt: `${drill.question.prompt} = ?`, answer: drill.question.answer, factKey: drill.question.key }, correct, responseMs, `${drill.id}-${drill.index}`);
+    drill.correct += correct ? 1 : 0;
+    drill.feedback = { correct, responseMs, rawAnswer };
+    renderFactDrill();
+}
+
+function advanceFactDrill() {
+    const drill = state.factDrill;
+    if (drill.index + 1 >= drill.total) {
+        drill.complete = true;
+        renderFactDrill();
+        return;
+    }
+    const previousKey = drill.question.key;
+    drill.index += 1;
+    drill.feedback = null;
+    drill.startedAt = Date.now();
+    drill.question = selectFactQuestion(previousKey);
+    renderFactDrill();
+    window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function renderFactDrill() {
+    const drill = state.factDrill;
+    if (drill.complete) {
+        app.innerHTML = `<section class="fact-drill-page"><div class="page-heading"><div><div class="eyebrow mint">Base facts / Session complete</div><h1>${drill.correct}<span> / ${drill.total}</span></h1><p>Your multiplication, division, and square observations are now reflected in the mastery grids.</p></div></div><div class="result-actions"><button class="button" data-action="start-facts">Drill another 30</button><button class="quiet-button" data-view="analytics">Open mastery grids</button><button class="quiet-button" data-view="dashboard">Return to desk</button></div></section>`;
+        return;
+    }
+    const question = drill.question;
+    const fact = factSummary(state.profile, question.key);
+    app.innerHTML = `<section class="fact-drill-page"><header class="fact-drill-header"><button class="icon-button" data-action="exit-facts" aria-label="Exit base facts">×</button><div><div class="eyebrow">Base facts · ${question.operation}</div><div class="progress-line"><span style="width:${(drill.index / drill.total) * 100}%"></span></div></div><div class="fact-drill-stat"><span>Question</span><strong>${drill.index + 1} / ${drill.total}</strong></div><div class="fact-drill-stat"><span>Correct</span><strong>${drill.correct}</strong></div></header>
+        <article class="fact-drill-card"><div class="question-tags"><span>${fact.attempts ? `${fact.status} · ${fact.rating}/100` : "unmeasured"}</span><span>${question.kind === "square" ? "15²–20²" : "1×1–15×15"}</span></div><div class="fact-prompt">${question.prompt}<span>= ?</span></div>
+        ${drill.feedback ? `<section class="fact-feedback ${drill.feedback.correct ? "correct" : "incorrect"}"><strong>${drill.feedback.correct ? "Correct" : `Answer: ${question.answer}`}</strong><span>${(drill.feedback.responseMs / 1000).toFixed(1)}s · mastery updated</span><button class="button" data-action="next-fact">Next fact</button></section>` : `<form class="fact-answer-form" data-form="fact-answer"><input name="answer" inputmode="decimal" autocomplete="off" aria-label="Answer" autofocus required><button class="button" type="submit">Submit</button></form>`}</article></section>`;
+    if (!drill.feedback) app.querySelector("[name='answer']")?.focus();
 }
 
 function weightedSkill(mode, index) {
@@ -572,10 +651,10 @@ function renderFactMastery() {
         }).join("");
         return `<div class="matrix-axis row-axis">${left % 10 === 0 || left === 1 ? left : ""}</div>${cells}`;
     }).join("");
-    const timesHeader = Array.from({ length: 12 }, (_, index) => `<div class="fact-axis">${index + 1}</div>`).join("");
-    const timesRows = Array.from({ length: 12 }, (_, rowIndex) => {
+    const timesHeader = Array.from({ length: 15 }, (_, index) => `<div class="fact-axis">${index + 1}</div>`).join("");
+    const timesRows = Array.from({ length: 15 }, (_, rowIndex) => {
         const left = rowIndex + 1;
-        const cells = Array.from({ length: 12 }, (_, columnIndex) => {
+        const cells = Array.from({ length: 15 }, (_, columnIndex) => {
             const right = columnIndex + 1;
             const key = `times:${left}x${right}`;
             return factCell(key, `${left} × ${right}`, left * right);
@@ -588,9 +667,9 @@ function renderFactMastery() {
         const detail = fact.attempts ? `${Math.round(fact.accuracy * 100)}% · ${seconds(fact.avgTime)}` : "Not measured";
         return `<div class="square-fact ${fact.status}" title="${esc(`${value}² = ${value * value} · ${detail}`)}"><span>${value}²</span><strong>${value * value}</strong></div>`;
     }).join("");
-    return `<section class="fact-mastery-section"><div class="section-heading"><div><div class="eyebrow">Breakdown mastery</div><h2>Subproblem-strength grids</h2><p>These grids update only when you complete a worksheet step. A step contributes one observation total: retries make that one observation a miss, and the final correct response lets you advance.</p></div><div class="fact-legend"><span class="strong">Strong</span><span class="developing">Developing</span><span class="weak">Weak</span><span class="unmeasured">Unmeasured</span></div></div>
+    return `<section class="fact-mastery-section"><div class="section-heading"><div><div class="eyebrow">Breakdown mastery</div><h2>Subproblem-strength grids</h2><p>Worksheet steps and Base Facts sessions both update these grids. Retries count as one first-attempt miss, while direct fact drills record one observation per prompt.</p></div><div class="fact-legend"><span class="strong">Strong</span><span class="developing">Developing</span><span class="weak">Weak</span><span class="unmeasured">Unmeasured</span></div></div>
         <div class="fact-board matrix-board"><div class="fact-board-heading"><div><h3>Addition and subtraction · 100 × 100</h3><span>One cell per completed breakdown step</span></div><div class="matrix-switch" role="group" aria-label="Choose operation matrix"><button class="${operation === "addition" ? "active" : ""}" data-action="set-fact-matrix" data-operation="addition">Addition</button><button class="${operation === "subtraction" ? "active" : ""}" data-action="set-fact-matrix" data-operation="subtraction">Subtraction</button></div></div><div class="mastery-matrix-wrap"><div class="mastery-matrix"><div class="matrix-axis corner">${operation === "addition" ? "+" : "−"}</div>${matrixHeaders}${matrixRows}</div></div></div>
-        <div class="fact-board"><div class="fact-board-heading"><div><h3>Multiplication / division · shared 12 × 12</h3><span>A ÷ B updates the matching B × quotient fact</span></div><span>Rows × columns</span></div><div class="times-grid-wrap"><div class="times-grid"><div class="fact-axis corner">×÷</div>${timesHeader}${timesRows}</div></div></div><div class="fact-board"><div class="fact-board-heading"><h3>Squares through 25²</h3><span>Direct square subproblems only</span></div><div class="squares-grid">${squareCells}</div></div></section>`;
+        <div class="fact-board"><div class="fact-board-heading"><div><h3>Multiplication / division · shared 15 × 15</h3><span>A ÷ B updates the matching B × quotient fact</span></div><span>Rows × columns</span></div><div class="times-grid-wrap"><div class="times-grid"><div class="fact-axis corner">×÷</div>${timesHeader}${timesRows}</div></div></div><div class="fact-board"><div class="fact-board-heading"><h3>Squares through 25²</h3><span>Base Facts emphasizes 15² through 20²</span></div><div class="squares-grid">${squareCells}</div></div></section>`;
 }
 
 function renderAnalytics() {
@@ -636,6 +715,7 @@ function render() {
     else if (state.view === "library") renderLibrary();
     else if (state.view === "settings") renderSettings();
     else if (state.view === "session") renderSession();
+    else if (state.view === "fact-drill") renderFactDrill();
     else if (state.view === "test-results") renderTestResults();
 }
 
@@ -652,6 +732,7 @@ document.addEventListener("click", event => {
     if (action === "start-learn") startLearn("learn");
     if (action === "start-daily") startLearn("daily");
     if (action === "start-focus") startLearn("focus");
+    if (action === "start-facts") startFactDrill();
     if (action === "test-setup") { state.view = "test-setup"; render(); }
     if (action === "start-calibration") startTest(20, 8, "mixed", "calibration");
     if (action === "show-help") {
@@ -664,6 +745,8 @@ document.addEventListener("click", event => {
     }
     if (action === "next-question") advanceLearn();
     if (action === "exit-session") { if (window.confirm("End this session and return to the training desk?")) setView("dashboard"); }
+    if (action === "exit-facts") { if (window.confirm("End this Base Facts session?")) setView("dashboard"); }
+    if (action === "next-fact") advanceFactDrill();
     if (action === "review-mistakes") startLearn("review", null, state.session.attempts.filter(item => !item.correct));
     if (action === "practice-like-test") { const key = [...state.session.groups].sort((a, b) => a.accuracy - b.accuracy)[0]?.key; startLearn("focus", key); }
     if (action === "export-data") {
@@ -687,6 +770,7 @@ document.addEventListener("submit", event => {
     const data = new FormData(form);
     if (form.dataset.form === "answer") submitMainAnswer(data.get("choice") ?? data.get("answer"));
     if (form.dataset.form === "scaffold") submitScaffold(data.get("scaffoldAnswer"));
+    if (form.dataset.form === "fact-answer") submitFactAnswer(data.get("answer"));
     if (form.dataset.form === "test-setup") {
         const minutes = data.get("minutes") === "custom" ? Number(data.get("customMinutes")) : Number(data.get("minutes"));
         startTest(Number(data.get("count")), Math.max(1, Math.min(60, minutes || 5)), data.get("format"));

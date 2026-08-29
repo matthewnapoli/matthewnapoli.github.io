@@ -61,7 +61,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .section-heading, .panel-top, .page-heading { align-items: flex-end; display: flex; justify-content: space-between; }
 .section-heading h2, .panel h3 { font-size: 1.45rem; letter-spacing: -.04em; margin: 9px 0 0; }
 .section-heading > span, .rank-label { color: var(--muted); font-size: .65rem; }
-.mode-grid { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; margin-top: 30px; }
+.mode-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 30px; }
 .mode-card { background: var(--panel); border: 1px solid var(--line); min-height: 330px; padding: 32px; position: relative; transition: border-color .15s ease, transform .15s ease; }
 .mode-card:hover { border-color: var(--line-bright); transform: translateY(-2px); }
 .mode-card::before { background: var(--mint); content: ""; height: 2px; left: 32px; position: absolute; top: -1px; width: 76px; }
@@ -275,7 +275,25 @@ kbd { background: transparent; border: 1px solid currentColor; border-radius: 2p
 .matrix-cell.developing { background: var(--amber); }
 .matrix-cell.weak { background: var(--red); }
 .times-grid-wrap { overflow-x: auto; padding-bottom: 5px; }
-.times-grid { display: grid; gap: 4px; grid-template-columns: 32px repeat(12, minmax(38px, 1fr)); min-width: 720px; }
+.times-grid { display: grid; gap: 4px; grid-template-columns: 32px repeat(15, minmax(38px, 1fr)); min-width: 850px; }
+
+.fact-drill-page { margin: 0 auto; max-width: 980px; min-height: calc(100vh - 130px); padding: 42px 0 100px; width: calc(100% - 48px); }
+.fact-drill-header { align-items: center; border-bottom: 1px solid var(--line); display: grid; gap: 20px; grid-template-columns: auto 1fr auto auto; min-height: 70px; }
+.fact-drill-stat { display: grid; gap: 6px; min-width: 80px; }
+.fact-drill-stat span { color: var(--muted-2); font-size: .5rem; text-transform: uppercase; }
+.fact-drill-stat strong { font-size: .72rem; font-weight: 400; }
+.fact-drill-card { align-items: center; display: flex; flex-direction: column; justify-content: center; min-height: 620px; }
+.fact-prompt { font-size: clamp(3.2rem, 8vw, 6.8rem); letter-spacing: -.05em; text-align: center; }
+.fact-prompt span { color: var(--muted-2); display: block; font-size: .3em; letter-spacing: 0; margin-top: 15px; }
+.fact-answer-form { display: grid; grid-template-columns: minmax(180px, 330px) auto; margin-top: 60px; }
+.fact-answer-form input { background: transparent; border: 0; border-bottom: 1px solid var(--line-bright); font-size: 1.6rem; min-height: 54px; padding: 0 14px; text-align: center; }
+.fact-answer-form input:focus { border-color: var(--mint); outline: 0; }
+.fact-feedback { align-items: center; border-top: 1px solid var(--line); display: grid; gap: 8px; grid-template-columns: 1fr auto; margin-top: 58px; min-width: min(520px, 100%); padding-top: 22px; }
+.fact-feedback strong { font-size: 1rem; font-weight: 500; }
+.fact-feedback.correct strong { color: var(--mint); }
+.fact-feedback.incorrect strong { color: var(--red); }
+.fact-feedback span { color: var(--muted); font-size: .58rem; grid-column: 1; }
+.fact-feedback .button { grid-column: 2; grid-row: 1 / span 2; }
 .fact-axis { align-items: center; color: var(--muted-2); display: flex; font-size: .54rem; justify-content: center; min-height: 34px; }
 .fact-axis.corner { color: var(--mint); }
 .fact-cell { align-items: center; background: #0a0e11; border: 1px solid var(--line); display: flex; justify-content: center; min-height: 38px; }
@@ -371,6 +389,14 @@ td { border-bottom: 1px solid var(--line); padding: 15px 14px; text-transform: c
     .calibration-callout { align-items: stretch; flex-direction: column; gap: 20px; }
     .mode-grid, .summary-grid, .strategy-grid, .fact-tabs { grid-template-columns: 1fr; }
     .mode-card { min-height: 350px; }
+    .fact-drill-page { width: calc(100% - 32px); }
+    .fact-drill-header { grid-template-columns: auto 1fr auto; }
+    .fact-drill-stat:last-child { display: none; }
+    .fact-drill-card { min-height: 500px; }
+    .fact-answer-form { grid-template-columns: 1fr; width: 100%; }
+    .fact-answer-form .button { margin-top: 10px; width: 100%; }
+    .fact-feedback { grid-template-columns: 1fr; }
+    .fact-feedback .button { grid-column: 1; grid-row: auto; width: 100%; }
     .training-mix span { font-size: .43rem; }
     .session-bar { gap: 10px; grid-template-columns: auto 1fr auto auto; height: 82px; padding: 0 14px; }
     .session-bar .session-stat { min-width: 66px; padding-left: 10px; }

@@ -247,6 +247,7 @@ export function weakestFacts(profile, prefix, limit = 8) {
 }
 
 function breakdownFactKey(step) {
+    if (/^(times:\d+x\d+|square:\d+)$/.test(step?.factKey || "")) return step.factKey;
     const prompt = String(step?.prompt || "").replaceAll(",", "").trim();
     let match = prompt.match(/^(-?\d+)\s*([+−×÷])\s*(-?\d+)\s*=\s*\?$/);
     if (match && match.length === 4) {
@@ -257,18 +258,18 @@ function breakdownFactKey(step) {
         if (operator === "−" && left >= 1 && left <= 100 && right >= 1 && right <= 100) return `subtract:${left}x${right}`;
         if (operator === "×") {
             if (left === right && left <= 25) return `square:${left}`;
-            if (left >= 1 && left <= 12 && right >= 1 && right <= 12) return `times:${left}x${right}`;
+            if (left >= 1 && left <= 15 && right >= 1 && right <= 15) return `times:${left}x${right}`;
         }
         if (operator === "÷") {
             const quotient = Math.abs(Number(step.answer));
-            if (right >= 1 && right <= 12 && Number.isInteger(quotient) && quotient >= 1 && quotient <= 12) return `times:${right}x${quotient}`;
+            if (right >= 1 && right <= 15 && Number.isInteger(quotient) && quotient >= 1 && quotient <= 15) return `times:${right}x${quotient}`;
         }
     }
     match = prompt.match(/^(\d+)\s+groups of\s+(\d+)\s*=\s*\?$/i);
     if (match) {
         const left = Number(match[1]);
         const right = Number(match[2]);
-        if (left <= 12 && right <= 12) return `times:${left}x${right}`;
+        if (left <= 15 && right <= 15) return `times:${left}x${right}`;
     }
     match = prompt.match(/^Double\s+(\d+)\.?$/i);
     if (match && Number(match[1]) <= 12) return `times:2x${Number(match[1])}`;

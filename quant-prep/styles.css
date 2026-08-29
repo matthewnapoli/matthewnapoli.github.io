@@ -1,0 +1,58 @@
+:root {
+    color-scheme: dark;
+    --bg: #080b0e;
+    --panel: #0e1317;
+    --line: #20282e;
+    --text: #eef2f3;
+    --muted: #89949c;
+    --green: #67e8a5;
+    --amber: #e9b968;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Source Code Pro", ui-monospace, monospace;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.app-shell { min-height: 100vh; }
+
+.topbar {
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    height: 64px;
+    justify-content: space-between;
+    padding: 0 4vw;
+}
+
+.brand { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; }
+.breadcrumb, .eyebrow { color: var(--muted); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
+
+.page { margin: 0 auto; max-width: 1180px; padding: 72px 28px 96px; }
+
+.hero { max-width: 780px; }
+.hero h1 { font-size: clamp(2.6rem, 6vw, 5.8rem); letter-spacing: -.07em; line-height: .96; margin: 20px 0 24px; }
+.hero p { color: #aab3b8; font-family: Inter, Arial, sans-serif; font-size: 1.12rem; line-height: 1.65; max-width: 660px; }
+
+.module-grid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1.6fr) minmax(260px, .8fr); margin-top: 64px; }
+.module-card { background: var(--panel); border: 1px solid var(--line); min-height: 310px; padding: 30px; }
+.module-card.active { display: flex; flex-direction: column; justify-content: space-between; }
+.module-card h2 { font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.05em; margin: 18px 0; }
+.module-card p { color: var(--muted); font-family: Inter, Arial, sans-serif; line-height: 1.6; }
+.module-meta { color: var(--green); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+.button { align-items: center; background: var(--green); color: #07120c; display: inline-flex; font-size: .8rem; font-weight: 600; justify-content: space-between; min-height: 48px; padding: 0 18px; width: 220px; }
+.soon-list { color: var(--muted); font-size: .78rem; line-height: 2.15; list-style: none; margin: 22px 0 0; padding: 0; }
+
+@media (max-width: 760px) {
+    .topbar { padding: 0 20px; }
+    .page { padding: 52px 20px 72px; }
+    .module-grid { grid-template-columns: 1fr; margin-top: 44px; }
+    .hero h1 { font-size: 3rem; }
+}
